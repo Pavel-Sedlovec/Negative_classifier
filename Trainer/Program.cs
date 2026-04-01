@@ -8,7 +8,8 @@ namespace Trainer
     internal class Program
     {
         private static string _path = @"D:\labeled.csv";
-        private static string _savePath = "D:\\Мальков 2 курс\\Negative_classifier\\Core\\Data\\dataTest.json";
+        private static string _savePath = "D:\\Мальков 2 курс\\Negative_classifier\\Api\\Data\\dataTest.json";
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello, World!");

@@ -16,7 +16,7 @@ namespace Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            string modelPath = "D:\\Мальков 2 курс\\Negative_classifier\\Core\\Data\\dataTest.json";
+            string modelPath = "D:\\Мальков 2 курс\\Negative_classifier\\Api\\Data\\dataTest.json";
             if (File.Exists(modelPath))
             {
                 var model = DataModel.Load(modelPath);
