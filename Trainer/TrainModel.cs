@@ -101,7 +101,17 @@ namespace Trainer
                 var testRawData = shuffledData.Skip(trainSize).ToList();
                 var testRawLabels = shuffledLabels.Skip(trainSize).ToList();
 
+                int pos = 0; int neg = 0;
+                for (int i = 0; i < trainRawLabels.Count; i++)
+                {
+                    if (trainRawLabels[i] == 0) pos++; else neg++;
+                }
+                Console.WriteLine($"pos: {pos}, neg {neg}");
+
                 var (trainData, trainLabels, dataModel) = VectorizeData(trainRawData, trainRawLabels);
+
+                Console.WriteLine("Векторизация завершена");
+
                 TrainAndSaveSVM(trainData, trainLabels, dataModel);
 
                 var model = DataModel.Load(_savePath);
