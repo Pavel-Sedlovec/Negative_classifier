@@ -13,6 +13,10 @@ namespace Core.Model
         private double[] _features;
         private int _label;
 
+        public int Lab { get; set; }
+        public int[] Indexes { get; set; }
+        public double Weights { get; set; }
+
 
         public string Text
         {
