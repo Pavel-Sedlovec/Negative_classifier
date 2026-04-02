@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,31 +31,38 @@ namespace Core.Services
             get { return _b; }
         }
 
-        public void Train(List<double[]> inputs, int[] labels, double learningRate = 0.001, double lambda = 0.01, int epoch = 100)
+        public void Train(List<TextVector> vector, double learningRate = 0.001, double lambda = 0.01, int epoch = 100)
         {
-            double totalPos = labels.Count(l => l == 1);
-            double totalNeg = labels.Count(l => l == 0);
+            double totalPos = 0;
+            double totalNeg = 0;
+            for(int i = 0; i < vector.Count; i++)
+            {
+                if (vector[i].Label == 1) totalPos++;
+                else totalNeg++;
+            }
             double weightPos = (totalPos + totalNeg) / (2.0 * totalPos); // ~1.99
             double weightNeg = (totalPos + totalNeg) / (2.0 * totalNeg); // ~0.73
 
             for (int i = 0; i < epoch; i++)
             {
-                for (int j = 0; j < inputs.Count; j++)
+                for (int j = 0; j < vector.Count; j++)
                 {
-                    int svmLabel = labels[j] == 1 ? 1 : -1;
-                    double classWeight = labels[j] == 1 ? weightPos : weightNeg;
-                    double prediction = PredictRaw(inputs[j]);
+                    int svmLabel = vector[j].Label == 1 ? 1 : -1;
+                    double classWeight = vector[j].Label == 1 ? weightPos : weightNeg;
+                    double prediction = PredictRaw(vector[j]);
 
                     if (prediction * svmLabel >= 1)
                     {
-                        for (int k = 0; k < _size; k++)
-                            _weights[k] -= learningRate * (2 * lambda * _weights[k]);
+                        for (int k = 0; k < vector[j].Indexes.Length; k++)
+                            _weights[vector[j].Indexes[k]] -= learningRate * (2 * lambda * _weights[vector[j].Indexes[k]]);
                     }
                     else
                     {
-                        for (int k = 0; k < _size; k++)
-                            _weights[k] += learningRate * classWeight * (inputs[j][k] * svmLabel - 2 * lambda * _weights[k]);
+                        for (int k = 0; k < vector[j].Indexes.Length; k++)
+                            _weights[vector[j].Indexes[k]] += learningRate * classWeight * 
+                                (vector[j].Weights[k] * svmLabel - 2 * lambda * _weights[vector[j].Indexes[k]]);
                         _b += learningRate * classWeight * svmLabel;
+
                     }
                 }
             }
@@ -71,20 +79,20 @@ namespace Core.Services
             else return 1;
         }
 
-        private double PredictRaw(double[] signs)
+        private double PredictRaw(TextVector vector)
         {
             double prediction = 0;
-            for (int i = 0; i < _size; i++)           
-                prediction += signs[i] * _weights[i];
+            for (int i = 0; i < vector.Indexes.Length; i++)           
+                prediction += vector.Weights[i] * _weights[vector.Indexes[i]];
             
             return prediction + _b;
         }
 
-        public static int PredictStatic(double[] input, DataModel model)
+        public static int PredictStatic(TextVector vector, DataModel model)
         {
             double prediction = 0;
-            for (int i = 0; i < model.SvmWeights.Length; i++)
-                prediction += input[i] * model.SvmWeights[i];
+            for (int i = 0; i < vector.Indexes.Length; i++)
+                prediction += vector.Weights[i] * model.SvmWeights[vector.Indexes[i]];
             prediction += model.SvmBias;
 
             if (prediction >= 0) return 1;

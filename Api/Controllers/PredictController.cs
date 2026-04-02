@@ -10,7 +10,7 @@ namespace Api.Controllers
     public class PredictController : Controller
     {
         private DataModel _dataModel;
-        private double[] _vectorData;
+        private TextVector _vector;
         public PredictController(DataModel dataModel)
         {
             _dataModel = dataModel;
@@ -25,9 +25,9 @@ namespace Api.Controllers
             }
 
             string cleanText = CleanerData.FullClean(text);
-            _vectorData = VectorizationData.VectorizeSingle(cleanText, _dataModel);
+            _vector = VectorizationData.VectorizeSingle(cleanText, _dataModel);
 
-            int result = SVM.PredictStatic(_vectorData, _dataModel);
+            int result = SVM.PredictStatic(_vector, _dataModel);
 
             return Ok(new
             {

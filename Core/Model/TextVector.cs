@@ -11,11 +11,10 @@ namespace Core.Model
     {
         private string _text;
         private double[] _features;
-        private int _label;
 
-        public int Lab { get; set; }
+        public int Label { get; set; }
         public int[] Indexes { get; set; }
-        public double Weights { get; set; }
+        public double[] Weights { get; set; }
 
 
         public string Text
@@ -30,10 +29,5 @@ namespace Core.Model
             set { _features = value; }
         }
 
-        public int Label
-        {
-            get { return _label; }
-            set { _label = value; }
-        }
     }
 }

@@ -123,7 +123,8 @@ namespace Core.Services
         {
             CreatDictionary();
             IDF();
-            List<TextVector> textVectors = new List<TextVector>();
+            List<TextVector> textVectors = new List<TextVector>();   
+            
             for (int i = 0; i < data.Count; i++)
             {                
                 string doc = data[i];
@@ -131,6 +132,10 @@ namespace Core.Services
                 //List<string> wordsBigram = new List<string>();
 
                 TextVector vector = new TextVector();
+
+                List<int> indexes = new List<int>();
+                List<double> weights = new List<double>();
+
                 vector.Text = data[i];
                 vector.Features = new double[dictionary.Count];
                 vector.Label = lable[i];
@@ -150,26 +155,34 @@ namespace Core.Services
 
                     int count = wordsInDoc.Count(w => w == wordFromDictionary);
 
-                    double tf = (double)count / wordsInDoc.Length;
-
-                    vector.Features[j] = tf * idf[j];
+                    if(count != 0)
+                    {
+                        double tf = (double)count / wordsInDoc.Length;
+                        indexes.Add(j);
+                        weights.Add(tf * idf[j]);
+                    }                                        
                 }
+                vector.Indexes = indexes.ToArray();
+                vector.Weights = weights.ToArray();
                 textVectors.Add(vector);
             }
             return textVectors;
         }
 
-        public static double[] VectorizeSingle(string cleanText, DataModel model)
+        public static TextVector VectorizeSingle(string cleanText, DataModel model)
         {
             string[] wordsInDoc = cleanText.Split(' ');
             //List<string> wordsBigram = new List<string>();
 
-            double[] vector = new double[model.Dictionary.Count];
+            TextVector vector = new TextVector();
 
             //for(int i = 0; i < wordsInDoc.Length - 1; i++)
             //{
             //    wordsBigram.Add(wordsInDoc[i] + "_" + wordsInDoc[i + 1]);
             //}
+
+            List<int> indexes = new List<int>();
+            List<double> weights = new List<double>();
 
             for (int j = 0; j < model.Dictionary.Count; j++)
             {
@@ -181,9 +194,16 @@ namespace Core.Services
 
                 int count = wordsInDoc.Count(w => w == wordFromDictionary);
 
-                double tf = (double)count / wordsInDoc.Length;
-                vector[j] = tf * model.IdfWeights[j];
+                if(count != 0)
+                {
+                    double tf = (double)count / wordsInDoc.Length;
+
+                    indexes.Add(j);
+                    weights.Add(tf * model.IdfWeights[j]);
+                }               
             }
+            vector.Indexes = indexes.ToArray();
+            vector.Weights = weights.ToArray();
             return vector;
         }
     }
