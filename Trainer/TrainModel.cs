@@ -23,9 +23,9 @@ namespace Trainer
             {
                 var (rawData, rawLabels) = GetAllTextAndLable(dataPath);
 
-                var (trainData, trainLabels, dataModel) = VectorizeData(rawData, rawLabels);
+                var (trainVector, dataModel) = VectorizeData(rawData, rawLabels);
 
-                TrainAndSaveSVM(trainData, trainLabels, dataModel);               
+                TrainAndSaveSVM(trainVector, dataModel);               
             }
             catch (Exception ex)
             {
@@ -54,7 +54,7 @@ namespace Trainer
             return (cleanedData, cleanedLabels);
         }
 
-        public (List<double[]>, int[], DataModel) VectorizeData(List<string> data, List<int> lable)
+        public (List<TextVector>, DataModel) VectorizeData(List<string> data, List<int> lable)
         {
             VectorizationData vd = new VectorizationData(data, lable);
             DataModel dm = new DataModel();
@@ -66,16 +66,13 @@ namespace Trainer
             //STOLP stolp = new STOLP();
             //textVectors = stolp.TextStolp(textVectors);
 
-            var trainData = textVectors.Select(v => v.Features).ToList();
-            var trainLabels = textVectors.Select(v => v.Label).ToArray();
-
-            return (trainData, trainLabels, dm);
+            return (textVectors, dm);
         }
 
-        public void TrainAndSaveSVM(List<double[]> trainData, int[] trainLabels, DataModel dm)
+        public void TrainAndSaveSVM(List<TextVector> vector, DataModel dm)
         {
             SVM svm = new SVM(dm.Dictionary.Count); 
-            svm.Train(trainData, trainLabels);
+            svm.Train(vector);
 
             dm.SvmWeights = svm.GetWeights;
             dm.SvmBias = svm.GetBias;
@@ -108,11 +105,11 @@ namespace Trainer
                 }
                 Console.WriteLine($"pos: {pos}, neg {neg}");
 
-                var (trainData, trainLabels, dataModel) = VectorizeData(trainRawData, trainRawLabels);
+                var (trainVector, dataModel) = VectorizeData(trainRawData, trainRawLabels);
 
                 Console.WriteLine("Векторизация завершена");
 
-                TrainAndSaveSVM(trainData, trainLabels, dataModel);
+                TrainAndSaveSVM(trainVector, dataModel);
 
                 var model = DataModel.Load(_savePath);
                 var evaluator = new ModelEvaluator();

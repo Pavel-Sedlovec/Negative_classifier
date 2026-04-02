@@ -19,7 +19,7 @@ namespace Trainer
             {
                 if (string.IsNullOrEmpty(testData[i])) continue;
 
-                double[] vector = VectorizationData.VectorizeSingle(testData[i], model);
+                TextVector vector = VectorizationData.VectorizeSingle(testData[i], model);
                 int predicted = SVM.PredictStatic(vector, model);
                 int actual = testLabels[i];
 

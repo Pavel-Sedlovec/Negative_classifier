@@ -31,11 +31,6 @@ namespace Trainer
             Console.WriteLine($"Weights min: {model.SvmWeights.Min()}");
             Console.WriteLine($"Weights avg: {model.SvmWeights.Average()}");
 
-            string clean = CleanerData.FullClean("пиздец позор зоопарк ебаный чиж говно человек ещё хуже");
-            double[] vec = VectorizationData.VectorizeSingle(clean, model);
-            double raw = vec.Zip(model.SvmWeights, (v, w) => v * w).Sum() + model.SvmBias;
-            Console.WriteLine($"Raw score: {raw}");
-
         }        
     }    
 }
