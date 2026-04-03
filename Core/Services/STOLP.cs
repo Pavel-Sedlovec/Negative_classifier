@@ -25,7 +25,7 @@ namespace Core.Services
                 {
                     if (i == j) continue;
 
-                    double dist = GetDistance(currentVector.Features, data[j].Features);
+                    double dist = GetDistance(currentVector, data[j]);
 
                     if (dist < epsilon) continue;
 
@@ -50,15 +50,43 @@ namespace Core.Services
             return clearData;
         }
 
-        public double GetDistance(double[] v1, double[] v2)
+        public double GetDistance(TextVector v1, TextVector v2)
         {
             double sum = 0;
+            int i = 0, j = 0;
 
-            for(int i = 0; i<v1.Length; i++)
+            while (i < v1.Indexes.Length && j < v2.Indexes.Length)
             {
-                double difference = v1[i] - v2[i];
-                sum += difference * difference;
+                if (v1.Indexes[i] == v2.Indexes[j])
+                {
+                    double diff = v1.Weights[i] - v2.Weights[j];
+                    sum += diff * diff;
+                    i++; j++;
+                }
+                else if (v1.Indexes[i] < v2.Indexes[j])
+                {
+                    sum += v1.Weights[i] * v1.Weights[i];
+                    i++;
+                }
+                else
+                {
+                    sum += v2.Weights[j] * v2.Weights[j];
+                    j++;
+                }
             }
+
+            while (i < v1.Indexes.Length)
+            {
+                sum += v1.Weights[i] * v1.Weights[i];
+                i++;
+            }
+
+            while (j < v2.Indexes.Length)
+            {
+                sum += v2.Weights[j] * v2.Weights[j];
+                j++;
+            }
+
             return Math.Sqrt(sum);
         }
     }
