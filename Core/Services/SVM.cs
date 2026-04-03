@@ -1,6 +1,7 @@
 ﻿using Core.Model;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
@@ -90,13 +91,33 @@ namespace Core.Services
 
         public static int PredictStatic(TextVector vector, DataModel model)
         {
+            double prediction = GetPrediction(vector, model);
+
+            if (prediction >= 0) return 1;
+            else return 0;
+        }
+
+        public static (int predict, double confidence) PredictWithConfidence(TextVector vector, DataModel model)
+        {
+            int label;
+            double confidence;
+            double prediction = GetPrediction(vector, model);
+
+            if (prediction >= 0) label = 1;
+            else label = 0;
+
+            confidence = 1.0 / (1.0 + Math.Exp(-Math.Abs(prediction)));
+
+            return (label, confidence);
+        }
+
+        private static double GetPrediction(TextVector vector, DataModel model)
+        {
             double prediction = 0;
             for (int i = 0; i < vector.Indexes.Length; i++)
                 prediction += vector.Weights[i] * model.SvmWeights[vector.Indexes[i]];
             prediction += model.SvmBias;
-
-            if (prediction >= 0) return 1;
-            else return 0;
+            return prediction;
         }
     }
 }
