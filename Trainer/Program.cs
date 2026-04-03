@@ -16,8 +16,8 @@ namespace Trainer
         {
             Console.WriteLine("Hello, World!");
             TrainModel trainModel = new TrainModel(_savePath);
-            //trainModel.TrainWithEvaluation(_path);
-            trainModel.TrainSVM(_path);
+            trainModel.TrainWithEvaluation(_path);
+            //trainModel.TrainSVM(_path);
 
             DataModel model = DataModel.Load(_savePath);
 

@@ -1,7 +1,7 @@
-﻿using Core.Model;
+﻿using Api.Services;
+using Core.Model;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Api.Controllers
 {
@@ -9,11 +9,13 @@ namespace Api.Controllers
     [Route("api/[controller]")]
     public class PredictController : Controller
     {
-        private DataModel _dataModel;
-        private TextVector _vector;
-        public PredictController(DataModel dataModel)
+        private IClassifyText _classifyText;
+
+        private const int NEGATIVE_SENTIMENT = 1;
+        private const int POSITIVE_SENTIMENT = 0;
+        public PredictController(IClassifyText classifyext)
         {
-            _dataModel = dataModel;
+            _classifyText = classifyext;
         }
 
         [HttpPost("Classify")]
@@ -24,16 +26,33 @@ namespace Api.Controllers
                 return BadRequest("Text bad");
             }
 
-            string cleanText = CleanerData.FullClean(text);
-            _vector = VectorizationData.VectorizeSingle(cleanText, _dataModel);
-
-            int result = SVM.PredictStatic(_vector, _dataModel);
+            int result = _classifyText.Classify(text);
 
             return Ok(new
             {
                 Source = text,
-                Lable = result,
-                Sentiment = result == 1 ? "Negative" : "Positive"
+                Label = result,
+                Sentiment = result == NEGATIVE_SENTIMENT ? "Negative" : "Positive"
+            });
+        }
+
+        [HttpPost("ClassifyWithConfidence")]
+        public IActionResult ClassifyWithConfidence([FromBody] string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return BadRequest("Text bad");
+            }
+            int result;
+            double confidence;
+            (result, confidence) = _classifyText.ClassifyWithConfidence(text);
+
+            return Ok(new
+            {
+                Source = text,
+                Label = result,
+                Sentiment = result == NEGATIVE_SENTIMENT ? "Negative" : "Positive",
+                Confidence = confidence
             });
         }
     }

@@ -1,4 +1,5 @@
 
+using Api.Services;
 using Core.Model;
 
 namespace Api
@@ -16,12 +17,14 @@ namespace Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            string modelPath = "D:\\Мальков 2 курс\\Negative_classifier\\Api\\Data\\dataTest.json";
+            string modelPath = "D:\\Мальков 2 курс\\Negative_classifier\\Api\\Data\\dataTest2.json";
             if (File.Exists(modelPath))
             {
                 var model = DataModel.Load(modelPath);
                 builder.Services.AddSingleton(model);
             }
+
+            builder.Services.AddScoped<IClassifyText, ClassifyText>();
 
             var app = builder.Build();
 
