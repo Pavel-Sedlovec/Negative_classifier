@@ -66,6 +66,8 @@ namespace Trainer
             //STOLP stolp = new STOLP();
             //textVectors = stolp.TextStolp(textVectors);
 
+            Console.WriteLine("очистка STOLP завершена");
+
             return (textVectors, dm);
         }
 
