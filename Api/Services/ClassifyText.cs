@@ -1,5 +1,6 @@
 ﻿using Core.Model;
 using Core.Services;
+using Microsoft.Extensions.Primitives;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Api.Services
@@ -33,6 +34,18 @@ namespace Api.Services
 
             (result, confidence) = SVM.PredictWithConfidence(_vector, _dataModel);
             return (result, confidence);
+        }
+
+        public List<int> ClassifyBatch(List<string> texts)
+        {
+            List<int> results = new List<int>();
+
+            foreach(string text in texts)
+            {
+                results.Add(Classify(text));
+            }
+
+            return results;
         }
     }
 }

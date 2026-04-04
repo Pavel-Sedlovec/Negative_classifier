@@ -55,5 +55,25 @@ namespace Api.Controllers
                 Confidence = confidence
             });
         }
+
+        [HttpPost("ClassifyBath")]
+        public IActionResult ClassifyBath([FromBody] List<string> texts)
+        {
+            var results = _classifyText.ClassifyBatch(texts);
+
+            var responses = new List<object>();
+
+            for(int i = 0; i < texts.Count; i++)
+            {
+                responses.Add(new
+                {
+                    Text = texts[i],
+                    Label = results[i],
+                    Sentiment = results[i] == NEGATIVE_SENTIMENT ? "Negative" : "Positive"
+                });
+            }
+
+            return Ok(responses);
+        }
     }
 }
