@@ -27,7 +27,16 @@ namespace Api
             builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IClassifyText, ClassifyText>();
 
+            var testConn = builder.Configuration.GetConnectionString("DefaultConnection");
+            Console.WriteLine($"DEBUG: Connection String is: {testConn}");
+
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                db.Database.Migrate();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

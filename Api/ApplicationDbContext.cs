@@ -5,13 +5,12 @@ namespace Api
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Mesage> Mesages { get; set; }
+        public DbSet<Message> Messages { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Chat> Chats { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-            Database.Migrate();
+        {            
         }
     }
 }
