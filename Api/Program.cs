@@ -1,6 +1,7 @@
 
 using Api.Services;
 using Core.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api
 {
@@ -23,7 +24,7 @@ namespace Api
                 var model = DataModel.Load(modelPath);
                 builder.Services.AddSingleton(model);
             }
-
+            builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IClassifyText, ClassifyText>();
 
             var app = builder.Build();
