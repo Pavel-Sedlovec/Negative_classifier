@@ -28,7 +28,7 @@ namespace Api
             builder.Services.AddScoped<IClassifyText, ClassifyText>();
 
             var testConn = builder.Configuration.GetConnectionString("DefaultConnection");
-            Console.WriteLine($"DEBUG: Connection String is: {testConn}");
+            Console.WriteLine($"Connection String is: {testConn}");
 
             var app = builder.Build();
 

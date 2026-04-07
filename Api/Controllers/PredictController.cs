@@ -46,7 +46,7 @@ namespace Api.Controllers
             int result;
             double confidence;
             (result, confidence) = _classifyText.ClassifyWithConfidence(text);
-
+                       
             return Ok(new
             {
                 Source = text,
