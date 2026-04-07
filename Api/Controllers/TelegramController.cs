@@ -1,5 +1,5 @@
-﻿using Api.Models;
-using Api.Models.DTOs;
+﻿using Api.DTOs.Requests;
+using Api.Models;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +14,9 @@ namespace Api.Controllers
     {
         private IClassifyText _classifyText;
         private ApplicationDbContext _context;
+
+        private const int NEGATIVE_SENTIMENT = 1;
+        private const int POSITIVE_SENTIMENT = 0;
 
         public TelegramController(IClassifyText classifyText, ApplicationDbContext context)
         {
@@ -55,13 +58,25 @@ namespace Api.Controllers
             };
             await _context.Messages.AddRangeAsync(message);
             await _context.SaveChangesAsync();
+            
 
-            return Ok(new
+            return Ok(new DTOs.Responses.ClassifyMessage
             {
+                Text = req.Text,
                 Label = result,
                 Sentiment = result == 1 ? "Negative" : "Positive",
                 Confidence = confidence
             });
+        }
+
+
+        [HttpPost("Message")]
+        public async Task<IActionResult> StatsMessages(int chatId)
+        {
+            int totalMess = _context.Messages.Count(m => m.Chat_id == chatId);
+            int posMes = _context.Messages.Count(m => m.Chat_id == chatId && m.Label == POSITIVE_SENTIMENT);
+            int negMes = _context.Messages.Count(m => m.Chat_id == chatId && m.Label == NEGATIVE_SENTIMENT);
+            return Ok();
         }
     }
     

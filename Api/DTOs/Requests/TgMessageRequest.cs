@@ -1,5 +1,4 @@
-﻿
-namespace Api.Models.DTOs
+﻿namespace Api.DTOs.Requests
 {
     public class TgMessageRequest
     {
