@@ -6,7 +6,7 @@ namespace Api.Models
         public int Id { get; set; }
         public string Text { get; set; }
         public int Label {  get; set; } 
-        public int Confidence { get; set; }
+        public double Confidence { get; set; }
         public DateTime Created_at {  get; set; }
 
         [ForeignKey("Chat")]
