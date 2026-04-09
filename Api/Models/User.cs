@@ -1,4 +1,5 @@
-﻿namespace Api.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+namespace Api.Models
 {
     public class User
     {
