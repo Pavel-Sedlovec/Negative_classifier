@@ -1,6 +1,6 @@
 ﻿namespace Api.DTOs.Responses
 {
-    public class StatsResponse
+    public class MessageStatsInChat
     {
         public int Total { get; set; }
         public int Negative { get; set; }
