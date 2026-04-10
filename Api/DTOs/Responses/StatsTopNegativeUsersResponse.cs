@@ -6,5 +6,7 @@
         public int TotalMes { get; set; }
         public int NegativeMes{ get; set; }
         public int PositiveMes {  get; set; }
+        public double NegativePercent { get; set; }
+        public double PositivePercent { get; set; }
     }
 }
