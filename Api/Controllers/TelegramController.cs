@@ -181,5 +181,48 @@ namespace Api.Controllers
                 Password = newAdmin.Password
             });
         }
-    }    
+
+        [HttpGet("GetTopNegativeUsers/{chatId}/{count}")]
+        public async Task<IActionResult> GetTopNegativeUsers(long сhatId, int count)
+        {
+            List<User> responceUsers2  =
+                await _context.Messages.Where(m => m.Chat_id == сhatId && m.Label == 1)
+                .GroupBy(m => m.User_id)
+                .OrderByDescending(g => g.Count())
+                .Take(count)
+                .Join(_context.Users, g =>g.Key, u =>u.Id, (g, u) => u)
+                .ToListAsync();
+
+            var topUsers =
+                await _context.Messages.Where(m => m.Chat_id == сhatId && m.Label == 1)
+                .GroupBy(m => m.User_id)
+                .Select(g => new
+                {
+                    UserId = g.Key,
+                    Total = g.Count(),
+                    Negative = g.Count(m => m.Label == NEGATIVE_SENTIMENT),
+                    Positive = g.Count(m => m.Label == POSITIVE_SENTIMENT)
+                })
+                .OrderByDescending(x => x.UserId)
+                .Take(count)
+                .ToArrayAsync();
+
+            List<DTOs.Responses.StatsTopNegativeUsersResponse> response = new List<StatsTopNegativeUsersResponse>();
+
+            foreach (var item in topUsers)
+            {
+                var user = await _context.Users.FindAsync(item.UserId);
+                response.Add(new DTOs.Responses.StatsTopNegativeUsersResponse
+                {
+                    UserIdTg = user.User_id_tg,
+                    TotalMes = item.Total,
+                    NegativeMes = item.Negative,
+                    PositiveMes = item.Positive
+                });
+            }
+
+            return Ok(response);
+        }
+
+    }
 }
