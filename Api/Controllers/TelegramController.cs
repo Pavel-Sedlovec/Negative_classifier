@@ -1,6 +1,7 @@
 ﻿using Api.DTOs.Requests;
 using Api.DTOs.Responses;
 using Api.Models;
+using Api.Services.ChatService;
 using Api.Services.ClassifyTextService;
 using Api.Services.StatisticsServise;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +17,19 @@ namespace Api.Controllers
     {
         private IClassifyText _classifyText;
         private IMessageStats _messageStats;
+        private IChatService _chatService;
 
         private ApplicationDbContext _context;
 
         private const int NEGATIVE_SENTIMENT = 1;
         private const int POSITIVE_SENTIMENT = 0;
 
-        public TelegramController(IClassifyText classifyText, IMessageStats messageStats, ApplicationDbContext context)
+        public TelegramController(IClassifyText classifyText, IMessageStats messageStats, IChatService chatService, ApplicationDbContext context)
         {
             _classifyText = classifyText;
             _messageStats = messageStats;
             _context = context;
+            _chatService = chatService;
         }
 
         [HttpPost("Message")]
@@ -34,37 +37,8 @@ namespace Api.Controllers
         {
             var (result, confidence) = _classifyText.ClassifyWithConfidence(req.Text);
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.User_id_tg == req.UserIdTg);
+            var message = await _chatService.ProcessIncomingMessageAsync(req, result, confidence);
             
-            if(user == null)
-            {
-                user = new Models.User { User_id_tg = req.UserIdTg, Username = req.Username, First_name = req.FirstName };
-                await _context.Users.AddRangeAsync(user);
-                await _context.SaveChangesAsync();
-            }
-
-            var chat = await _context.Chats.FirstOrDefaultAsync(c => c.Chat_id_tg == req.ChatIdTg);
-
-            if (chat == null)
-            {
-                chat = new Models.Chat { Chat_id_tg = req.ChatIdTg, Name = req.ChatName, Added_at = DateTime.UtcNow };
-                await _context.Chats.AddRangeAsync(chat);
-                await _context.SaveChangesAsync();
-            }
-
-            var message = new Message
-            {
-                Text = req.Text,
-                Label = result,
-                Confidence = confidence,
-                Created_at = DateTime.UtcNow,
-                Chat_id = chat.Id,
-                User_id = user.Id
-            };
-            await _context.Messages.AddRangeAsync(message);
-            await _context.SaveChangesAsync();
-            
-
             return Ok(new DTOs.Responses.ClassifyMessage
             {
                 Text = req.Text,
@@ -173,6 +147,39 @@ namespace Api.Controllers
             return Ok(responses);
         }
 
-    }
-    
+
+        [HttpPost("SetAdmin")]
+        public async Task<IActionResult> SetAdmin([FromBody] long UserIdTg)
+        {
+            Admin admin = await _context.Admins.FirstOrDefaultAsync(a => a.TelegramId == UserIdTg);
+            Random random = new Random();
+
+            if(admin != null)
+            {
+                return Ok(new DTOs.Responses.AdminRegistrationResponse
+                {
+                    Message = "Аккаунт уже существует",
+                    Login = admin.Login,
+                    Password = admin.Password
+                });
+            }
+
+            var newAdmin = new Admin
+            {
+                Login = UserIdTg.ToString(),
+                Password = random.Next(100, 10000).ToString(),
+                TelegramId = UserIdTg
+            };
+
+            _context.Admins.Add(newAdmin);
+            await _context.SaveChangesAsync();
+
+            return Ok(new DTOs.Responses.AdminRegistrationResponse
+            {
+                Message = "Аккаунт успешно создан",
+                Login = newAdmin.Login,
+                Password = newAdmin.Password
+            });
+        }
+    }    
 }

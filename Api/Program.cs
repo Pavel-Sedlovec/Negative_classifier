@@ -1,3 +1,4 @@
+using Api.Services.ChatService;
 using Api.Services.ClassifyTextService;
 using Api.Services.StatisticsServise;
 using Core.Model;
@@ -27,6 +28,7 @@ namespace Api
             builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IClassifyText, ClassifyText>();
             builder.Services.AddScoped<IMessageStats, MessageStats>();
+            builder.Services.AddScoped<IChatService, ChatService>();
 
             var testConn = builder.Configuration.GetConnectionString("DefaultConnection");
             Console.WriteLine($"Connection String is: {testConn}");
