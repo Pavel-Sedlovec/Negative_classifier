@@ -102,18 +102,16 @@ namespace Api.Controllers
         }
 
         [HttpGet("TopNegative/{chatId}/{count}")]
-        public async Task<IActionResult> GetTopNegativeUsers(long сhatId, int count)
+        public async Task<IActionResult> GetTopNegativeUsers(long chatId, int count)
         {
-            List<User> responceUsers2 =
-                await _context.Messages.Where(m => m.Chat_id == сhatId && m.Label == 1)
-                .GroupBy(m => m.User_id)
-                .OrderByDescending(g => g.Count())
-                .Take(count)
-                .Join(_context.Users, g => g.Key, u => u.Id, (g, u) => u)
-                .ToListAsync();
+            var chat = await _context.Chats.FirstOrDefaultAsync(c => c.Chat_id_tg == chatId);
+            if(chat == null)
+            {
+                return Ok(new List<object>());
+            }
 
-            var topUsers =
-                await _context.Messages.Where(m => m.Chat_id == сhatId && m.Label == 1)
+            var topUsers = await _context.Messages
+                .Where(m => m.Chat_id == chat.Id)
                 .GroupBy(m => m.User_id)
                 .Select(g => new
                 {
@@ -122,7 +120,9 @@ namespace Api.Controllers
                     Negative = g.Count(m => m.Label == NEGATIVE_SENTIMENT),
                     Positive = g.Count(m => m.Label == POSITIVE_SENTIMENT)
                 })
-                .OrderByDescending(x => x.UserId)
+                .Where(x => x.Negative > 0)
+                .OrderByDescending(x => x.Negative)
+                .ThenByDescending(x => x.Total)
                 .Take(count)
                 .ToArrayAsync();
 

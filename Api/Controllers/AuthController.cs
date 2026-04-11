@@ -47,5 +47,23 @@ namespace Api.Controllers
                 Password = newAdmin.Password
             });
         }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] Api.DTOs.Requests.LoginRequest req)
+        {
+            var admin = await _context.Admins
+                .FirstOrDefaultAsync(a => a.Login == req.Login && a.Password == req.Password);
+
+            if (admin == null)
+            {
+                return Unauthorized(new { Message = "Неверный логин или пароль" });
+            }
+
+            return Ok(new DTOs.Responses.AdminRegistrationResponse
+            {
+                Message = "Успешный вход",
+                Login = admin.Login,
+            });
+        }
     }
 }
