@@ -56,8 +56,8 @@ namespace Api.Controllers
             });
         }
 
-        [HttpPost("ClassifyBath")]
-        public IActionResult ClassifyBath([FromBody] List<string> texts)
+        [HttpPost("ClassifyBatch")]
+        public IActionResult ClassifyBatch([FromBody] List<string> texts)
         {
             var results = _classifyText.ClassifyBatch(texts);
 

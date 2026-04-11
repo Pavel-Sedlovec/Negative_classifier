@@ -26,8 +26,14 @@ namespace Api.Controllers
                 return NotFound($"Админ с логином {adminLogin} не найден");
             }
 
-            List<ChatInfo> responses = await _context.Chats.Where(c => c.Admin_id == admin.Id)
-                .Select(c => new ChatInfo { Name = c.Name, Added_at = c.Added_at })
+            List<ChatInfo> responses = await _context.Chats
+                .Where(c => c.Admin_id == admin.Id)
+                .Select(c => new ChatInfo 
+                {
+                    ChatIdTg = c.Chat_id_tg,
+                    Name = c.Name,
+                    Added_at = c.Added_at 
+                })
                 .ToListAsync();
 
             return Ok(responses);

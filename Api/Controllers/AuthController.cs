@@ -15,9 +15,9 @@ namespace Api.Controllers
         }
 
         [HttpPost("SetAdmin")]
-        public async Task<IActionResult> SetAdmin([FromBody] long UserIdTg)
+        public async Task<IActionResult> SetAdmin([FromBody] DTOs.Requests.SetAdminRequest req)
         {
-            Admin admin = await _context.Admins.FirstOrDefaultAsync(a => a.TelegramId == UserIdTg);
+            Admin admin = await _context.Admins.FirstOrDefaultAsync(a => a.TelegramId == req.UserIdTg);
             Random random = new Random();
 
             if (admin != null)
@@ -32,9 +32,9 @@ namespace Api.Controllers
 
             var newAdmin = new Admin
             {
-                Login = UserIdTg.ToString(),
+                Login = req.UserIdTg.ToString(),
                 Password = random.Next(100, 10000).ToString(),
-                TelegramId = UserIdTg
+                TelegramId = req.UserIdTg
             };
 
             _context.Admins.Add(newAdmin);
@@ -49,7 +49,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] Api.DTOs.Requests.LoginRequest req)
+        public async Task<IActionResult> Login([FromBody] DTOs.Requests.LoginRequest req)
         {
             var admin = await _context.Admins
                 .FirstOrDefaultAsync(a => a.Login == req.Login && a.Password == req.Password);
