@@ -1,6 +1,8 @@
-
-using Api.Services;
+using Api.Services.ChatService;
+using Api.Services.ClassifyTextService;
+using Api.Services.StatisticsServise;
 using Core.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api
 {
@@ -23,10 +25,21 @@ namespace Api
                 var model = DataModel.Load(modelPath);
                 builder.Services.AddSingleton(model);
             }
-
+            builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IClassifyText, ClassifyText>();
+            builder.Services.AddScoped<IMessageStats, MessageStats>();
+            builder.Services.AddScoped<IChatService, ChatService>();
+
+            var testConn = builder.Configuration.GetConnectionString("DefaultConnection");
+            Console.WriteLine($"Connection String is: {testConn}");
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                db.Database.Migrate();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

@@ -3,7 +3,7 @@ using Core.Services;
 using Microsoft.Extensions.Primitives;
 using System.Reflection.Metadata.Ecma335;
 
-namespace Api.Services
+namespace Api.Services.ClassifyTextService
 {
     public class ClassifyText : IClassifyText
     {

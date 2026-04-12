@@ -1,4 +1,4 @@
-﻿using Api.Services;
+﻿using Api.Services.ClassifyTextService;
 using Core.Model;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +46,7 @@ namespace Api.Controllers
             int result;
             double confidence;
             (result, confidence) = _classifyText.ClassifyWithConfidence(text);
-
+                       
             return Ok(new
             {
                 Source = text,
@@ -56,8 +56,8 @@ namespace Api.Controllers
             });
         }
 
-        [HttpPost("ClassifyBath")]
-        public IActionResult ClassifyBath([FromBody] List<string> texts)
+        [HttpPost("ClassifyBatch")]
+        public IActionResult ClassifyBatch([FromBody] List<string> texts)
         {
             var results = _classifyText.ClassifyBatch(texts);
 
