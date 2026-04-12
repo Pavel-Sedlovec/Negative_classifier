@@ -63,9 +63,8 @@ namespace Api.Services.ChatService
         {
             var admin = await _context.Admins.FirstOrDefaultAsync(a => a.TelegramId == req.UserIdTg);
 
-            if (admin == null) return null; // Это просто юзер в неизвестном чате
+            if (admin == null) return null;
 
-            // Это админ! Создаем чат и привязываем его к нему
             var newChat = new Chat
             {
                 Chat_id_tg = req.ChatIdTg,
