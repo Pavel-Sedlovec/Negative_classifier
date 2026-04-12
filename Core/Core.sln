@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{96FE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{C519EE68-576E-4CE8-B590-3F43ADC829C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToxicityDashboard", "..\ToxicityDashboard\ToxicityDashboard.csproj", "{3FB4D61C-6968-4A38-87F7-06E4D8076B1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{641EC304-8289-49CA-ADD8-EA2B311A5D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{641EC304-8289-49CA-ADD8-EA2B311A5D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{641EC304-8289-49CA-ADD8-EA2B311A5D42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FB4D61C-6968-4A38-87F7-06E4D8076B1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FB4D61C-6968-4A38-87F7-06E4D8076B1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FB4D61C-6968-4A38-87F7-06E4D8076B1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FB4D61C-6968-4A38-87F7-06E4D8076B1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{80CAD04B-1E7A-48E0-BF06-B3DD77490B16} = {C519EE68-576E-4CE8-B590-3F43ADC829C1}
 		{ED31F5EF-5CE6-477C-B764-8C132B6A0ECD} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 		{641EC304-8289-49CA-ADD8-EA2B311A5D42} = {96FE35D4-9EFD-499F-9444-80B263A835E3}
+		{3FB4D61C-6968-4A38-87F7-06E4D8076B1F} = {96FE35D4-9EFD-499F-9444-80B263A835E3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {263C66E7-D2AF-470D-80C7-9BCF85CD7808}
