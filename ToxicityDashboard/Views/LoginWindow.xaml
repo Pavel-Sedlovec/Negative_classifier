@@ -3,68 +3,57 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Авторизация"
-        Height="400"
-        Width="350"
+        Height="450"
+        Width="380"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Background="{DynamicResource MaterialDesignPaper}">
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
 
     <Grid>
-        <materialDesign:Card Width="280"
-                             Height="300"
-                             UniformCornerRadius="15"
-                             materialDesign:ElevationAssist.Elevation="Dp8">
-            <StackPanel Margin="20"
-                        VerticalAlignment="Center">
-                <TextBlock Text="Toxic Monitor"
-                           FontSize="24"
+        <materialDesign:Card Width="300"
+                             VerticalAlignment="Center"
+                             Padding="30"
+                             UniformCornerRadius="15">
+            <StackPanel>
+                <materialDesign:PackIcon Kind="Shield"
+                                         Width="60"
+                                         Height="60"
+                                         HorizontalAlignment="Center"
+                                         Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                         Margin="0,0,0,10" />
+
+                <TextBlock Text="TOXIC MONITOR"
+                           FontSize="22"
                            FontWeight="Bold"
-                           Foreground="{DynamicResource PrimaryHueMidBrush}"
                            HorizontalAlignment="Center"
-                           Margin="0,0,0,20" />
+                           Margin="0,0,0,30"
+                           Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
                 <TextBox Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
                          materialDesign:HintAssist.Hint="Логин"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                         Margin="0,0,0,15" />
+                         Margin="0,0,0,20" />
 
                 <PasswordBox x:Name="TxtPassword"
                              materialDesign:HintAssist.Hint="Пароль"
                              Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
-                             Margin="0,0,0,25" />
+                             Margin="0,0,0,10" />
 
                 <TextBlock Text="{Binding ErrorMessage}"
                            Foreground="Red"
+                           FontSize="12"
                            HorizontalAlignment="Center"
-                           Margin="0,0,0,10"
-                           TextWrapping="Wrap" />
+                           Margin="0,5,0,15"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center" />
 
                 <Button Content="ВОЙТИ"
                         Command="{Binding DoLoginCommand}"
                         CommandParameter="{Binding ElementName=TxtPassword}"
-                        Style="{StaticResource MaterialDesignRaisedButton}"
-                        materialDesign:ButtonAssist.CornerRadius="8">
-                    <Button.Triggers>
-                        <EventTrigger RoutedEvent="MouseEnter">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                     To="0.8"
-                                                     Duration="0:0:0.2" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="MouseLeave">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                     To="1"
-                                                     Duration="0:0:0.2" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Button.Triggers>
-                </Button>
+                        Height="45"
+                        materialDesign:ButtonAssist.CornerRadius="8"
+                        Style="{StaticResource MaterialDesignRaisedButton}" />
             </StackPanel>
         </materialDesign:Card>
     </Grid>

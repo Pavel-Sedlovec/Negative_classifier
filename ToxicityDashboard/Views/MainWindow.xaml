@@ -3,51 +3,76 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
-        Title="Dashboard - Мониторинг токсичности"
-        Height="650"
-        Width="1100"
+        Title="Toxicity Monitor - Dashboard"
+        Height="720"
+        Width="1280"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource MaterialDesignPaper}">
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="280" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0"
                 Background="{DynamicResource MaterialDesignDarkBackground}"
-                CornerRadius="0,15,15,0"
-                Margin="0,0,5,0">
-            <StackPanel>
-                <TextBlock Text="Ваши Чаты"
-                           FontSize="20"
-                           FontWeight="Bold"
-                           Margin="15"
-                           Foreground="White" />
-                <ListBox ItemsSource="{Binding Chats}"
+                CornerRadius="0 20 20 0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0"
+                            Margin="20"
+                            Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Forum"
+                                             Foreground="Black"
+                                             Width="28"
+                                             Height="28"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,10,0" />
+                    <TextBlock Text="Ваши Чаты"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="Black"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding Chats}"
                          SelectedItem="{Binding SelectedChat}"
                          Background="Transparent"
-                         BorderThickness="0">
+                         BorderThickness="0"
+                         Padding="10,0"
+                         HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="10,5">
-                                <TextBlock Text="{Binding Name}"
-                                           FontWeight="SemiBold"
-                                           FontSize="16"
-                                           Foreground="White" />
-                                <TextBlock Text="{Binding Added_at, StringFormat='Добавлен: {0:dd.MM.yyyy}'}"
-                                           FontSize="12"
-                                           Foreground="Gray" />
-                            </StackPanel>
+                            <Border Margin="0,5"
+                                    Padding="15,10"
+                                    Background="#E0E0E0"
+                                    CornerRadius="8">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Name}"
+                                               FontWeight="SemiBold"
+                                               FontSize="15"
+                                               Foreground="Black" />
+                                    <TextBlock Text="{Binding Added_at, StringFormat='dd.MM.yyyy'}"
+                                               FontSize="11"
+                                               Foreground="#455A64"
+                                               Margin="0,4,0,0" />
+                                </StackPanel>
+                            </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-            </StackPanel>
+            </Grid>
         </Border>
 
         <Grid Grid.Column="1"
-              Margin="15">
+              Margin="25">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -56,58 +81,77 @@
 
             <Grid Grid.Row="0"
                   Margin="0,0,0,20">
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Center">
-                    <TextBlock Text="{Binding SelectedChat.Name, TargetNullValue='Выберите чат'}"
-                               FontSize="24"
-                               FontWeight="Bold" />
-                    <DatePicker SelectedDate="{Binding SelectedDate}"
-                                Margin="30,0,0,0"
-                                Width="150"
-                                materialDesign:HintAssist.Hint="Дата статистики"
-                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-                </StackPanel>
+                <TextBlock Text="{Binding SelectedChat.Name, TargetNullValue='Выберите чат...'}"
+                           FontSize="26"
+                           FontWeight="ExtraBold"
+                           VerticalAlignment="Center"
+                           Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center">
-                    <TextBlock Text="{Binding AdminName, StringFormat='Админ: {0}'}"
-                               Margin="0,0,15,0"
-                               VerticalAlignment="Center" />
-                    <Button Content="Выход"
-                            Command="{Binding LogoutCommand}"
+                    <materialDesign:PackIcon Kind="Account"
+                                             Width="24"
+                                             Height="24"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,8,0"
+                                             Foreground="Gray" />
+                    <TextBlock Text="{Binding AdminName}"
+                               Margin="0,0,20,0"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               FontWeight="Medium" />
+                    <Button Command="{Binding LogoutCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                            Style="{StaticResource MaterialDesignFlatButton}" />
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Content="ВЫХОД"
+                            Padding="10,0" />
                 </StackPanel>
             </Grid>
 
             <UniformGrid Grid.Row="1"
                          Columns="2"
                          Margin="0,0,0,20">
-                <materialDesign:Card Margin="5"
-                                     Padding="15"
-                                     UniformCornerRadius="10">
-                    <StackPanel>
-                        <TextBlock Text="Всего сообщений"
-                                   FontSize="14"
-                                   Foreground="Gray" />
-                        <TextBlock Text="{Binding TotalMessages}"
-                                   FontSize="28"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                <materialDesign:Card Margin="0,0,10,0"
+                                     Padding="20"
+                                     UniformCornerRadius="12">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CommentText"
+                                                 Width="40"
+                                                 Height="40"
+                                                 Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,20,0" />
+                        <StackPanel>
+                            <TextBlock Text="Сообщений всего"
+                                       FontSize="13"
+                                       Foreground="Gray" />
+                            <TextBlock Text="{Binding TotalMessages}"
+                                       FontSize="28"
+                                       FontWeight="Bold" />
+                        </StackPanel>
                     </StackPanel>
                 </materialDesign:Card>
-                <materialDesign:Card Margin="5"
-                                     Padding="15"
-                                     UniformCornerRadius="10">
-                    <StackPanel>
-                        <TextBlock Text="% Токсичности (Общий)"
-                                   FontSize="14"
-                                   Foreground="Gray" />
-                        <TextBlock Text="{Binding ToxicityPercent}"
-                                   FontSize="28"
-                                   FontWeight="Bold"
-                                   Foreground="IndianRed" />
+
+                <materialDesign:Card Margin="10,0,0,0"
+                                     Padding="20"
+                                     UniformCornerRadius="12">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="AlertCircle"
+                                                 Width="40"
+                                                 Height="40"
+                                                 Foreground="#D32F2F"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,20,0" />
+                        <StackPanel>
+                            <TextBlock Text="Общая токсичность"
+                                       FontSize="13"
+                                       Foreground="Gray" />
+                            <TextBlock Text="{Binding ToxicityPercent}"
+                                       FontSize="28"
+                                       FontWeight="Bold"
+                                       Foreground="#D32F2F" />
+                        </StackPanel>
                     </StackPanel>
                 </materialDesign:Card>
             </UniformGrid>
@@ -120,46 +164,80 @@
                 </Grid.ColumnDefinitions>
 
                 <materialDesign:Card Grid.Column="0"
-                                     Margin="5"
-                                     UniformCornerRadius="10"
-                                     Padding="10">
-                    <Grid>
-                        <TextBlock Text="За все время"
+                                     Margin="0,0,10,0"
+                                     UniformCornerRadius="12"
+                                     Padding="15">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Общий фон"
                                    FontWeight="Bold"
-                                   HorizontalAlignment="Center" />
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,10" />
                         <lvc:PieChart Series="{Binding PieChartSeries}"
-                                      Margin="0,25,0,0" />
-                    </Grid>
+                                      LegendPosition="Bottom" />
+                    </DockPanel>
                 </materialDesign:Card>
 
                 <materialDesign:Card Grid.Column="1"
-                                     Margin="5"
-                                     UniformCornerRadius="10"
-                                     Padding="10">
-                    <Grid>
-                        <StackPanel HorizontalAlignment="Center">
+                                     Margin="10,0,10,0"
+                                     UniformCornerRadius="12"
+                                     Padding="15">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top"
+                                    Margin="0,0,0,10">
                             <TextBlock Text="Статистика дня"
                                        FontWeight="Bold"
-                                       HorizontalAlignment="Center" />
-                            <TextBlock Text="{Binding DayToxicityPercent}"
                                        HorizontalAlignment="Center"
-                                       Foreground="IndianRed"
-                                       FontSize="12" />
+                                       Margin="0,0,0,10" />
+                            <DatePicker SelectedDate="{Binding SelectedDate}"
+                                        HorizontalAlignment="Center"
+                                        Width="150"
+                                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
                         </StackPanel>
-                        <lvc:PieChart Series="{Binding DayPieChartSeries}"
-                                      Margin="0,35,0,0" />
-                    </Grid>
+
+                        <Grid>
+                            <lvc:PieChart Series="{Binding DayPieChartSeries}"
+                                          LegendPosition="Bottom" />
+
+                            <TextBlock Text="Нет данных за этот день"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Foreground="Gray"
+                                       FontSize="14"
+                                       FontStyle="Italic">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility"
+                                                Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DayPieChartSeries.Count}"
+                                                         Value="0">
+                                                <Setter Property="Visibility"
+                                                        Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding DayPieChartSeries}"
+                                                         Value="{x:Null}">
+                                                <Setter Property="Visibility"
+                                                        Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </DockPanel>
                 </materialDesign:Card>
 
                 <materialDesign:Card Grid.Column="2"
-                                     Margin="5"
-                                     UniformCornerRadius="10"
-                                     Padding="10">
+                                     Margin="10,0,0,0"
+                                     UniformCornerRadius="12"
+                                     Padding="15">
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Top"
                                    Text="Топ нарушителей"
                                    FontWeight="Bold"
-                                   Margin="0,0,0,10" />
+                                   Margin="0,0,0,10"
+                                   HorizontalAlignment="Center" />
                         <DataGrid ItemsSource="{Binding TopNegativeUsers}"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
@@ -167,15 +245,24 @@
                                   Background="Transparent"
                                   BorderThickness="0">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID"
+                                <DataGridTextColumn Header="Tg id"
                                                     Binding="{Binding UserIdTg}"
                                                     Width="*" />
-                                <DataGridTextColumn Header="Сооб."
+                                <DataGridTextColumn Header="Общее кол-во"
                                                     Binding="{Binding TotalMes}"
                                                     Width="Auto" />
-                                <DataGridTextColumn Header="% Нег."
+                                <DataGridTextColumn Header="% негатива"
                                                     Binding="{Binding NegativePercent, StringFormat={}{0:F1}%}"
-                                                    Width="Auto" />
+                                                    Width="Auto">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground"
+                                                    Value="#D32F2F" />
+                                            <Setter Property="FontWeight"
+                                                    Value="Bold" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>

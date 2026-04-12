@@ -72,22 +72,29 @@ namespace ToxicityDashboard.ViewModels
             {
                 TotalMessages = stats.Total;
                 ToxicityPercent = $"{stats.NegativePercent:F1}%";
-
                 PieChartSeries = new ISeries[]
                 {
                     new PieSeries<int>
                     {
                         Values = new[] { stats.Positive },
-                        Name = "Позитив",
-                        Fill = new SolidColorPaint(SKColors.MediumSeaGreen)
+                        Name = "Адекватно",
+                        Fill = new SolidColorPaint(SKColors.MediumAquamarine),
+                        DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                        DataLabelsSize = 14,
+                        DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
                     },
                     new PieSeries<int>
                     {
                         Values = new[] { stats.Negative },
-                        Name = "Негатив",
-                        Fill = new SolidColorPaint(SKColors.IndianRed)
+                        Name = "Токсично",
+                        Fill = new SolidColorPaint(SKColors.Tomato),
+                        DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                        DataLabelsSize = 14,
+                        DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
                     }
                 };
+
+
             }
 
             var topUsers = await _apiService.GetTopNegativeUsersAsync(chatId);
@@ -100,13 +107,22 @@ namespace ToxicityDashboard.ViewModels
             if (SelectedChat == null) return;
 
             var stats = await _apiService.GetStatsByDayAsync(SelectedChat.ChatIdTg, SelectedDate);
-            if (stats != null)
+
+            if (stats != null && stats.Total > 0)
             {
                 DayToxicityPercent = $"{stats.NegativePercent:F1}%";
                 DayPieChartSeries = new ISeries[]
                 {
-            new PieSeries<int> { Values = new[] { stats.Positive }, Name = "Позитив (день)", Fill = new SolidColorPaint(SKColors.LightGreen) },
-            new PieSeries<int> { Values = new[] { stats.Negative }, Name = "Негатив (день)", Fill = new SolidColorPaint(SKColors.Crimson) }
+                    new PieSeries<int> {
+                        Values = new[] { stats.Positive },
+                        Name = "Адекватно",
+                        Fill = new SolidColorPaint(SKColors.MediumAquamarine)
+                    },
+                    new PieSeries<int> {
+                        Values = new[] { stats.Negative },
+                        Name = "Токсично",
+                        Fill = new SolidColorPaint(SKColors.Tomato)
+                    }
                 };
             }
             else
