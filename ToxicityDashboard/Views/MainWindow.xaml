@@ -1,0 +1,186 @@
+﻿<Window x:Class="ToxicityDashboard.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        Title="Dashboard - Мониторинг токсичности"
+        Height="650"
+        Width="1100"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource MaterialDesignPaper}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0"
+                Background="{DynamicResource MaterialDesignDarkBackground}"
+                CornerRadius="0,15,15,0"
+                Margin="0,0,5,0">
+            <StackPanel>
+                <TextBlock Text="Ваши Чаты"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Margin="15"
+                           Foreground="White" />
+                <ListBox ItemsSource="{Binding Chats}"
+                         SelectedItem="{Binding SelectedChat}"
+                         Background="Transparent"
+                         BorderThickness="0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="10,5">
+                                <TextBlock Text="{Binding Name}"
+                                           FontWeight="SemiBold"
+                                           FontSize="16"
+                                           Foreground="White" />
+                                <TextBlock Text="{Binding Added_at, StringFormat='Добавлен: {0:dd.MM.yyyy}'}"
+                                           FontSize="12"
+                                           Foreground="Gray" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Column="1"
+              Margin="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0"
+                  Margin="0,0,0,20">
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{Binding SelectedChat.Name, TargetNullValue='Выберите чат'}"
+                               FontSize="24"
+                               FontWeight="Bold" />
+                    <DatePicker SelectedDate="{Binding SelectedDate}"
+                                Margin="30,0,0,0"
+                                Width="150"
+                                materialDesign:HintAssist.Hint="Дата статистики"
+                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{Binding AdminName, StringFormat='Админ: {0}'}"
+                               Margin="0,0,15,0"
+                               VerticalAlignment="Center" />
+                    <Button Content="Выход"
+                            Command="{Binding LogoutCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFlatButton}" />
+                </StackPanel>
+            </Grid>
+
+            <UniformGrid Grid.Row="1"
+                         Columns="2"
+                         Margin="0,0,0,20">
+                <materialDesign:Card Margin="5"
+                                     Padding="15"
+                                     UniformCornerRadius="10">
+                    <StackPanel>
+                        <TextBlock Text="Всего сообщений"
+                                   FontSize="14"
+                                   Foreground="Gray" />
+                        <TextBlock Text="{Binding TotalMessages}"
+                                   FontSize="28"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                    </StackPanel>
+                </materialDesign:Card>
+                <materialDesign:Card Margin="5"
+                                     Padding="15"
+                                     UniformCornerRadius="10">
+                    <StackPanel>
+                        <TextBlock Text="% Токсичности (Общий)"
+                                   FontSize="14"
+                                   Foreground="Gray" />
+                        <TextBlock Text="{Binding ToxicityPercent}"
+                                   FontSize="28"
+                                   FontWeight="Bold"
+                                   Foreground="IndianRed" />
+                    </StackPanel>
+                </materialDesign:Card>
+            </UniformGrid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1.2*" />
+                </Grid.ColumnDefinitions>
+
+                <materialDesign:Card Grid.Column="0"
+                                     Margin="5"
+                                     UniformCornerRadius="10"
+                                     Padding="10">
+                    <Grid>
+                        <TextBlock Text="За все время"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center" />
+                        <lvc:PieChart Series="{Binding PieChartSeries}"
+                                      Margin="0,25,0,0" />
+                    </Grid>
+                </materialDesign:Card>
+
+                <materialDesign:Card Grid.Column="1"
+                                     Margin="5"
+                                     UniformCornerRadius="10"
+                                     Padding="10">
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="Статистика дня"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding DayToxicityPercent}"
+                                       HorizontalAlignment="Center"
+                                       Foreground="IndianRed"
+                                       FontSize="12" />
+                        </StackPanel>
+                        <lvc:PieChart Series="{Binding DayPieChartSeries}"
+                                      Margin="0,35,0,0" />
+                    </Grid>
+                </materialDesign:Card>
+
+                <materialDesign:Card Grid.Column="2"
+                                     Margin="5"
+                                     UniformCornerRadius="10"
+                                     Padding="10">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Топ нарушителей"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,10" />
+                        <DataGrid ItemsSource="{Binding TopNegativeUsers}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  HeadersVisibility="Column"
+                                  Background="Transparent"
+                                  BorderThickness="0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID"
+                                                    Binding="{Binding UserIdTg}"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Сооб."
+                                                    Binding="{Binding TotalMes}"
+                                                    Width="Auto" />
+                                <DataGridTextColumn Header="% Нег."
+                                                    Binding="{Binding NegativePercent, StringFormat={}{0:F1}%}"
+                                                    Width="Auto" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </materialDesign:Card>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
