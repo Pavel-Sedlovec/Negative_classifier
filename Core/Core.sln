@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToxicityDashboard", "..\ToxicityDashboard\ToxicityDashboard.csproj", "{3FB4D61C-6968-4A38-87F7-06E4D8076B1F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "..\Tests\Tests.csproj", "{A3FCF555-4785-42CA-B0D6-27FDC5F2F5F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{3FB4D61C-6968-4A38-87F7-06E4D8076B1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FB4D61C-6968-4A38-87F7-06E4D8076B1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FB4D61C-6968-4A38-87F7-06E4D8076B1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3FCF555-4785-42CA-B0D6-27FDC5F2F5F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3FCF555-4785-42CA-B0D6-27FDC5F2F5F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3FCF555-4785-42CA-B0D6-27FDC5F2F5F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3FCF555-4785-42CA-B0D6-27FDC5F2F5F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -55,12 +55,14 @@ namespace Core.Services
                     if (prediction * svmLabel >= 1)
                     {
                         for (int k = 0; k < vector[j].Indexes.Length; k++)
-                            _weights[vector[j].Indexes[k]] -= learningRate * (2 * lambda * _weights[vector[j].Indexes[k]]);
+                            _weights[vector[j].Indexes[k]] 
+                                -= learningRate * (2 * lambda * _weights[vector[j].Indexes[k]]);
                     }
                     else
                     {
                         for (int k = 0; k < vector[j].Indexes.Length; k++)
-                            _weights[vector[j].Indexes[k]] += learningRate * classWeight * 
+                            _weights[vector[j].Indexes[k]] 
+                                += learningRate * classWeight * 
                                 (vector[j].Weights[k] * svmLabel - 2 * lambda * _weights[vector[j].Indexes[k]]);
                         _b += learningRate * classWeight * svmLabel;
 
