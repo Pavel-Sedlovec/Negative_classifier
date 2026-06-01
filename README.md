@@ -1,14 +1,14 @@
 # Telegram Toxic Monitor
 
 <p align="left">
-  <img src="https://img.shields.io/badge/.NET%208.0-512BD4?style=for-the-badge&logo=.net&logoColor=white" alt=".NET 8" />
-  <img src="https://img.shields.io/badge/C%23%2012-239120?style=for-the-badge&logo=csharp&logoColor=white" alt="C#" />
-  <img src="https://img.shields.io/badge/ASP.NET%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="ASP.NET Core" />
-  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/EF%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="EF Core" />
-  <img src="https://img.shields.io/badge/WPF-512BD4?style=for-the-badge&logo=windows&logoColor=white" alt="WPF" />
-  <img src="https://img.shields.io/badge/Telegram%20Bot-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram Bot" />
-  <img src="https://img.shields.io/badge/Machine%20Learning-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white" alt="Machine Learning" />
+  <img src="https://img.shields.io/badge/.NET%208.0-512BD4?style=plastic&logo=.net&logoColor=white" alt=".NET 8" />
+  <img src="https://img.shields.io/badge/C%23%2012-239120?style=plastic&logo=csharp&logoColor=white" alt="C#" />
+  <img src="https://img.shields.io/badge/ASP.NET%20Core-512BD4?style=plastic&logo=dotnet&logoColor=white" alt="ASP.NET Core" />
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=plastic&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/EF%20Core-512BD4?style=plastic&logo=dotnet&logoColor=white" alt="EF Core" />
+  <img src="https://img.shields.io/badge/WPF-0078D4?style=plastic&logo=windows&logoColor=white" alt="WPF" />
+  <img src="https://img.shields.io/badge/Telegram-26A5E4?style=plastic&logo=telegram&logoColor=white" alt="Telegram Bot" />
+  <img src="https://img.shields.io/badge/ML-FF6F00?style=plastic&logo=tensorflow&logoColor=white" alt="Machine Learning" />
 </p>
 
 Инфраструктура для автоматизированной модерации контента в Telegram на базе алгоритмов машинного обучения. SVM-классификатор, обученный на реальных данных, определяет токсичность сообщений в реальном времени. Все ML-алгоритмы реализованы с нуля на C# без внешних зависимостей.
